@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package v1;
+option go_package = "github.com/bhojpur/oss/pkg/api/v1";
+import "oss.proto";
+
+message ListNfvoSpecsRequest{}
+
+message ListNfvoSpecsResponse {
+    Repository repo = 1;
+    string name = 2;
+    string path = 3;
+    string description = 4;
+    repeated DesiredAnnotation arguments = 5;
+}
+
+// DesiredAnnotation describes an annotation the NFV Orchestrator should have
+message DesiredAnnotation {
+    string name = 1;
+    bool required = 2;
+    string description = 3;
+}
+
+message IsReadOnlyRequest {}
+
+message IsReadOnlyResponse {
+    bool readonly = 1;
+}
+
+// OssUI offers services intended for the Bhojpur OSS web user interface
+service OssUI {
+    // ListNfvoSpecs returns a list of NFV Orchestrator(s) that can be started through the UI.
+    rpc ListNfvoSpecs(ListNfvoSpecsRequest) returns (stream ListNfvoSpecsResponse) {};
+
+    // IsReadOnly returns true if the UI is readonly.
+    rpc IsReadOnly(IsReadOnlyRequest) returns (IsReadOnlyResponse) {};
+}
